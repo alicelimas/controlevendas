@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .form-container { 
+        background-color: #ffffff; 
+        padding: 20px; 
+        border-radius: 10px; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+        margin-top: 20px; 
+    }
+    .form-container h2 { 
+        color: #1934ac; 
+        margin-bottom: 20px; 
+        font-size: 1.5rem; 
+        font-weight: 600; 
+    }
+    .form-floating { 
+        margin-bottom: 15px; 
+    }
+    .form-control { 
+        border-radius: 8px; 
+        border: 1px solid #ced4da; 
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); 
+    }
+    .form-control:focus { 
+        border-color: #547BCF; 
+        box-shadow: 0 0 5px rgba(84, 123, 207, 0.5); 
+    }
+    .btn-primary { 
+        background-color: #1934ac; 
+        border: none; 
+        border-radius: 8px; 
+        padding: 10px 20px; 
+        font-weight: 500; 
+        transition: all 0.3s ease; 
+    }
+    .btn-primary:hover { 
+        background-color: #547BCF; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    }
+</style>
+<div class="form-container">
+    <h2>Cadastrar Cliente</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>
+            <label for="nome">Nome</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required>
+            <label for="sobrenome">Sobrenome</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="contato" name="contato" placeholder="Contato" required>
+            <label for="contato">Contato</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+</div>
+{% endblock %}

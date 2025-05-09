@@ -1,0 +1,643 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .history-container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .history-container h2 {
+        color: #1934ac;
+        margin-bottom: 20px;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .history-container h3 {
+        color: #1934ac;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .history-container h4 {
+        color: #1934ac;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        height: calc(2.5rem + 2px);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #547BCF;
+        box-shadow: 0 0 5px rgba(84, 123, 207, 0.5);
+    }
+
+    .btn-primary {
+        background-color: #1934ac;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+
+    .btn-primary:hover {
+        background-color: #547BCF;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-back {
+        background-color: #2b5757;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    .btn-back:hover {
+        background-color: #629280;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        color: #ffffff;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead th {
+        background-color: #2f727a;
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #fafafa;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background-color: #2f727a;
+        color: #ffffff;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #1934ac;
+    }
+
+    .modal-footer .btn-primary:hover {
+        background-color: #547BCF;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #6c757d;
+    }
+
+    .modal-footer .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .modal {
+        z-index: 1055;
+    }
+
+    .modal-backdrop {
+        z-index: 1050;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+
+    .cliente-section {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .page-link {
+        border-radius: 5px;
+        margin: 0 3px;
+        color: #1934ac;
+    }
+
+    .page-link:hover {
+        background-color: #547BCF;
+        color: #ffffff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #1934ac;
+        border-color: #1934ac;
+        color: #ffffff;
+    }
+
+    .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .messages li {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    .messages li.success {
+        background-color: #dff0d8;
+        color: #3c763d;
+    }
+
+    .messages li.error {
+        background-color: #f2dede;
+        color: #a94442;
+    }
+
+    .accordion-button {
+        background-color: #f8f9fa;
+        color: #1934ac;
+        font-size: 1.25rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .accordion-button:hover {
+        background-color: #e9ecef;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #ffffff;
+        color: #1934ac;
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-button:focus {
+        box-shadow: 0 0 5px rgba(84, 123, 207, 0.5);
+        border-color: #547BCF;
+    }
+
+    .accordion-body {
+        background-color: #ffffff;
+        border-radius: 0 0 8px 8px;
+        padding: 20px;
+    }
+</style>
+
+<div class="history-container">
+    <h2>Histórico de Vendas e Parcelas</h2>
+
+    <!-- Exibir mensagens -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Formulário de Filtros -->
+    <div class="form-container">
+        <form method="get" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="cliente" class="form-label">Filtrar por Cliente</label>
+                    <select name="cliente" id="cliente" class="form-select">
+                        <option value="">Todos os Clientes</option>
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}" {% if cliente_id == cliente.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cliente.nome }} {{ cliente.sobrenome }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="data_inicio" class="form-label">Data Início</label>
+                    <input type="date" name="data_inicio" id="data_inicio" class="form-control"
+                        value="{{ data_inicio }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="data_fim" class="form-label">Data Fim</label>
+                    <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ data_fim }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Exibição agrupada por cliente -->
+    <div class="accordion" id="accordionClientes">
+        {% for item in page_obj %}
+        <div class="cliente-section accordion-item mb-3"
+            style="border: none; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+            <h3 class="accordion-header" id="heading{{ item.cliente.id }}">
+                <button class="accordion-button d-flex align-items-start flex-column" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#collapse{{ item.cliente.id }}" 
+                        aria-expanded="{% if cliente_id == item.cliente.id|stringformat:'s' %}true{% else %}false{% endif %}" 
+                        aria-controls="collapse{{ item.cliente.id }}"
+                        style="background-color: {% if cliente_id == item.cliente.id|stringformat:'s' %}#ffffff{% else %}#f8f9fa{% endif %}; color: #1934ac; border-radius: 10px; padding: 12px 15px;">
+                    <div class="d-flex align-items-center w-100">
+                        <i class="bi {% if cliente_id == item.cliente.id|stringformat:'s' %}bi-chevron-down{% else %}bi-chevron-right{% endif %} me-3" style="font-size: 1.2rem;"></i>
+                        <span class="fw-bold" style="font-size: 1.4rem;">{{ item.cliente.nome }} {{ item.cliente.sobrenome }}</span>
+                    </div>
+                    <div class="text-muted small mt-1" style="font-size: 0.9rem; padding-left: 33px;">
+                        Vendas: R$ {{ item.total_vendas|floatformat:2 }} | 
+                        Saldo: R$ {{ item.total_saldo_devedor|floatformat:2 }} | 
+                        Pendentes: R$ {{ item.total_parcelas_pendentes|floatformat:2 }}
+                    </div>
+                </button>
+            </h3>
+            <div id="collapse{{ item.cliente.id }}"
+                class="accordion-collapse collapse {% if cliente_id == item.cliente.id|stringformat:'s' %}show{% endif %}"
+                aria-labelledby="heading{{ item.cliente.id }}">
+                <div class="accordion-body p-4" style="background-color: #ffffff; border-radius: 0 0 8px 8px;">
+                    <!-- Tabela de Vendas -->
+                    <h4 class="text-primary mb-3">Vendas</h4>
+                    {% if item.vendas %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Valor</th>
+                                <th>Parcelas</th>
+                                <th>Créditos</th>
+                                <th>Saldo Devedor</th>
+                                <th>Data Compra</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venda in item.vendas %}
+                            <tr>
+                                <td>{{ venda.produto }}</td>
+                                <td>R$ {{ venda.valor|floatformat:2 }}</td>
+                                <td>{{ venda.parcelas }}</td>
+                                <td>R$ {{ venda.creditos|floatformat:2 }}</td>
+                                <td>R$ {{ venda.saldo_devedor|floatformat:2 }}</td>
+                                <td>{{ venda.data_compra|date:"d/m/Y" }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#editarVendaModal"
+                                        onclick="preencherModalEditar('{{ venda.id }}', '{{ venda.cliente.nome|add:' '|add:venda.cliente.sobrenome|escapejs }}', '{{ venda.produto|escapejs }}', '{{ venda.valor|floatformat:2|escapejs }}', '{{ venda.parcelas|escapejs }}', '{{ venda.data_compra|date:'Y-m-d'|escapejs }}', '{{ venda.vencimento|date:'Y-m-d'|escapejs }}', '{{ venda.creditos|floatformat:2|escapejs }}', '{{ venda.saldo_devedor|floatformat:2|escapejs }}')">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#excluirVendaModal"
+                                        onclick="preencherModalExcluir('{{ venda.id }}', '{{ venda.produto|escapejs }}', '{{ venda.cliente.nome|add:' '|add:venda.cliente.sobrenome|escapejs }}', '{{ venda.valor|floatformat:2|escapejs }}')">
+                                        <i class="bi bi-trash"></i> Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7">Nenhuma venda encontrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Nenhuma venda encontrada para este cliente.</p>
+                    {% endif %}
+
+                    <!-- Tabela de Parcelas -->
+                    <h4 class="text-primary mb-3">Parcelas</h4>
+                    {% if item.parcelas %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Parcela</th>
+                                <th>Valor</th>
+                                <th>Vencimento</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for parcela in item.parcelas %}
+                            <tr>
+                                <td>{{ parcela.numero }}</td>
+                                <td>R$ {{ parcela.valor|floatformat:2 }}</td>
+                                <td>{{ parcela.vencimento|date:"d/m/Y" }}</td>
+                                <td>{{ parcela.status }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Nenhuma parcela encontrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Nenhuma parcela encontrada para este cliente.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">Nenhum dado encontrado com os filtros aplicados.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Paginação -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Navegação de páginas">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if cliente_id %}&cliente={{ cliente_id }}{% endif %}{% if data_inicio %}&data_inicio={{ data_inicio }}{% endif %}{% if data_fim %}&data_fim={{ data_fim }}{% endif %}" aria-label="Anterior">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">«</span>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}{% if cliente_id %}&cliente={{ cliente_id }}{% endif %}{% if data_inicio %}&data_inicio={{ data_inicio }}{% endif %}{% if data_fim %}&data_fim={{ data_fim }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if cliente_id %}&cliente={{ cliente_id }}{% endif %}{% if data_inicio %}&data_inicio={{ data_inicio }}{% endif %}{% if data_fim %}&data_fim={{ data_fim }}{% endif %}" aria-label="Próximo">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">»</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-back">Voltar ao Dashboard</a>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal fade" id="editarVendaModal" tabindex="-1" aria-labelledby="editarVendaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarVendaModalLabel">Editar Venda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" id="editarVendaForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="venda_id" id="editar_venda_id">
+                        <input type="hidden" name="origem" value="historico">
+                        <input type="hidden" name="cliente" value="{{ cliente_id|default_if_none:'' }}">
+                        <input type="hidden" name="data_inicio" value="{{ data_inicio|default_if_none:'' }}">
+                        <input type="hidden" name="data_fim" value="{{ data_fim|default_if_none:'' }}">
+                        <div class="mb-3">
+                            <label for="editar_cliente" class="form-label">Cliente</label>
+                            <input type="text" class="form-control" id="editar_cliente" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_produto" class="form-label">Produto</label>
+                            <input type="text" name="produto" class="form-control" id="editar_produto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_valor" class="form-label">Valor Total (R$)</label>
+                            <input type="number" name="valor" step="0.01" class="form-control" id="editar_valor"
+                                placeholder="R$ 123,45" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_data_compra" class="form-label">Data da Compra</label>
+                            <input type="date" name="data_compra" class="form-control" id="editar_data_compra" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_parcelas" class="form-label">Quantidade de Parcelas</label>
+                            <input type="number" name="parcelas" min="1" class="form-control" id="editar_parcelas"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_vencimento" class="form-label">Vencimento 1ª Parcela</label>
+                            <input type="date" name="vencimento" class="form-control" id="editar_vencimento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_creditos" class="form-label">Créditos (R$)</label>
+                            <input type="number" name="creditos" step="0.01" class="form-control" id="editar_creditos"
+                                placeholder="R$ 123,45" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_saldo_devedor" class="form-label">Saldo Devedor (R$)</label>
+                            <input type="number" name="saldo_devedor" step="0.01" class="form-control"
+                                id="editar_saldo_devedor" placeholder="R$ 123,45" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div class="modal fade" id="excluirVendaModal" tabindex="-1" aria-labelledby="excluirVendaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="excluirVendaModalLabel">Excluir Venda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir a venda de "<span id="excluir_produto"></span>" para <span
+                            id="excluir_cliente"></span> no valor de R$ <span id="excluir_valor"></span>?</p>
+                    <form method="post" action="" id="excluirVendaForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="venda_id" id="excluir_venda_id">
+                        <input type="hidden" name="origem" value="historico">
+                        <input type="hidden" name="cliente" value="{{ cliente_id|default_if_none:'' }}">
+                        <input type="hidden" name="data_inicio" value="{{ data_inicio|default_if_none:'' }}">
+                        <input type="hidden" name="data_fim" value="{{ data_fim|default_if_none:'' }}">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para preencher os modais -->
+    <script>
+        function preencherModalEditar(id, cliente, produto, valor, parcelas, data_compra, vencimento, creditos, saldo_devedor) {
+            document.getElementById('editar_venda_id').value = id;
+            document.getElementById('editar_cliente').value = cliente;
+            document.getElementById('editar_produto').value = produto;
+            document.getElementById('editar_valor').value = parseFloat(valor).toFixed(2);
+            document.getElementById('editar_parcelas').value = parseInt(parcelas);
+            document.getElementById('editar_data_compra').value = data_compra;
+            document.getElementById('editar_vencimento').value = vencimento;
+            document.getElementById('editar_creditos').value = parseFloat(creditos).toFixed(2);
+            document.getElementById('editar_saldo_devedor').value = parseFloat(saldo_devedor).toFixed(2);
+            document.getElementById('editarVendaForm').action = `/editar-venda/${id}/`;
+        }
+
+        function preencherModalExcluir(id, produto, cliente, valor) {
+            document.getElementById('excluir_venda_id').value = id;
+            document.getElementById('excluir_produto').innerText = produto;
+            document.getElementById('excluir_cliente').innerText = cliente;
+            document.getElementById('excluir_valor').innerText = parseFloat(valor).toFixed(2);
+            document.getElementById('excluirVendaForm').action = `/excluir-venda/${id}/`;
+        }
+
+        // Validação do formulário de edição
+        document.getElementById('editarVendaForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Impede o envio padrão até validar
+
+            // Limpar mensagens de erro anteriores
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.remove());
+
+            // Obter valores dos campos
+            const produto = document.getElementById('editar_produto').value.trim();
+            const valor = parseFloat(document.getElementById('editar_valor').value);
+            const parcelas = parseInt(document.getElementById('editar_parcelas').value);
+            const dataCompra = document.getElementById('editar_data_compra').value;
+            const vencimento = document.getElementById('editar_vencimento').value;
+            const creditos = parseFloat(document.getElementById('editar_creditos').value);
+            const saldoDevedor = parseFloat(document.getElementById('editar_saldo_devedor').value);
+
+            let isValid = true;
+
+            // Função para exibir mensagem de erro
+            function showError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                const error = document.createElement('div');
+                error.className = 'error-message text-danger';
+                error.style.fontSize = '0.875rem';
+                error.style.marginTop = '5px';
+                error.innerText = message;
+                field.parentElement.appendChild(error);
+                isValid = false;
+            }
+
+            // Validações
+            if (!produto) {
+                showError('editar_produto', 'O campo Produto é obrigatório.');
+            }
+            if (isNaN(valor) || valor <= 0) {
+                showError('editar_valor', 'O Valor Total deve ser maior que 0.');
+            }
+            if (isNaN(parcelas) || parcelas < 1) {
+                showError('editar_parcelas', 'A Quantidade de Parcelas deve ser pelo menos 1.');
+            }
+            if (!dataCompra) {
+                showError('editar_data_compra', 'A Data da Compra é obrigatória.');
+            }
+            if (!vencimento) {
+                showError('editar_vencimento', 'O Vencimento da 1ª Parcela é obrigatório.');
+            }
+            if (isNaN(creditos) || creditos < 0) {
+                showError('editar_creditos', 'Os Créditos não podem ser negativos.');
+            }
+            if (isNaN(saldoDevedor) || saldoDevedor < 0) {
+                showError('editar_saldo_devedor', 'O Saldo Devedor não pode ser negativo.');
+            }
+            // Verificar consistência entre valor, creditos e saldo_devedor
+            if (saldoDevedor > valor) {
+                showError('editar_saldo_devedor', 'O Saldo Devedor não pode ser maior que o Valor Total.');
+            }
+            if (creditos > valor) {
+                showError('editar_creditos', 'Os Créditos não podem ser maiores que o Valor Total.');
+            }
+
+            // Se tudo estiver válido, enviar o formulário
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
+    {% endblock %}

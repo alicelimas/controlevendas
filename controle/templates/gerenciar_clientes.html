@@ -1,0 +1,471 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .clients-container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .clients-container h2 {
+        color: #1934ac;
+        margin-bottom: 20px;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control:focus {
+        border-color: #547BCF;
+        box-shadow: 0 0 5px rgba(84, 123, 207, 0.5);
+    }
+
+    .btn-primary {
+        background-color: #1934ac;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+
+    .btn-primary:hover {
+        background-color: #547BCF;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-back {
+        background-color: #2b5757;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    .btn-back:hover {
+        background-color: #629280;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        color: #ffffff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead th {
+        background-color: #2f727a;
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #fafafa;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 0.875rem;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background-color: #2f727a;
+        color: #ffffff;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #1934ac;
+    }
+
+    .modal-footer .btn-primary:hover {
+        background-color: #547BCF;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #6c757d;
+    }
+
+    .modal-footer .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .modal {
+        z-index: 1055;
+    }
+
+    .modal-backdrop {
+        z-index: 1050;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .page-link {
+        border-radius: 5px;
+        margin: 0 3px;
+        color: #1934ac;
+    }
+
+    .page-link:hover {
+        background-color: #547BCF;
+        color: #ffffff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #1934ac;
+        border-color: #1934ac;
+        color: #ffffff;
+    }
+
+    .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+    
+    .search-form {
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="clients-container">
+    <h2>Gerenciar Clientes</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!-- Barra de Pesquisa -->
+    <form method="get" class="search-form">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar por nome, sobrenome ou contato"
+                value="{{ query|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </form>
+    <!-- Botão para cadastrar novo cliente -->
+    <div class="mb-4">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cadastrarClienteModal">
+            <i class="bi bi-plus"></i> Cadastrar Novo Cliente
+        </button>
+    </div>
+
+    <!-- Tabela de Clientes -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Contato</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in page_obj %}
+            <tr>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.sobrenome }}</td>
+                <td>{{ cliente.contato }}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarClienteModal"
+                        onclick="preencherModalEditar('{{ cliente.id }}', '{{ cliente.nome|escapejs }}', '{{ cliente.sobrenome|escapejs }}', '{{ cliente.contato|escapejs }}')">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#excluirClienteModal"
+                        onclick="preencherModalExcluir('{{ cliente.id }}', '{{ cliente.nome|add:' '|add:cliente.sobrenome|escapejs }}')">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Nenhum cliente cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginação -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Navegação de páginas">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próximo">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                </li>
+                {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-back">Voltar ao Dashboard</a>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div class="modal fade" id="cadastrarClienteModal" tabindex="-1" aria-labelledby="cadastrarClienteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cadastrarClienteModalLabel">Cadastrar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'cadastrar_cliente' %}" id="cadastrarClienteForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cadastrar_nome" class="form-label">Nome</label>
+                            <input type="text" name="nome" class="form-control" id="cadastrar_nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadastrar_sobrenome" class="form-label">Sobrenome</label>
+                            <input type="text" name="sobrenome" class="form-control" id="cadastrar_sobrenome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadastrar_contato" class="form-label">Contato</label>
+                            <input type="text" name="contato" class="form-control" id="cadastrar_contato" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal fade" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarClienteModalLabel">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" id="editarClienteForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="cliente_id" id="editar_cliente_id">
+                        <div class="mb-3">
+                            <label for="editar_nome" class="form-label">Nome</label>
+                            <input type="text" name="nome" class="form-control" id="editar_nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_sobrenome" class="form-label">Sobrenome</label>
+                            <input type="text" name="sobrenome" class="form-control" id="editar_sobrenome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_contato" class="form-label">Contato</label>
+                            <input type="text" name="contato" class="form-control" id="editar_contato" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div class="modal fade" id="excluirClienteModal" tabindex="-1" aria-labelledby="excluirClienteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="excluirClienteModalLabel">Excluir Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir o cliente <span id="excluir_cliente_nome"></span>?</p>
+                    <form method="post" action="" id="excluirClienteForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="cliente_id" id="excluir_cliente_id">
+                        <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para preencher os modais -->
+<script>
+    function preencherModalEditar(id, nome, sobrenome, contato) {
+        document.getElementById('editar_cliente_id').value = id;
+        document.getElementById('editar_nome').value = nome;
+        document.getElementById('editar_sobrenome').value = sobrenome;
+        document.getElementById('editar_contato').value = contato;
+        document.getElementById('editarClienteForm').action = `/editar-cliente/${id}/`;
+    }
+
+    function preencherModalExcluir(id, nomeCompleto) {
+        document.getElementById('excluir_cliente_id').value = id;
+        document.getElementById('excluir_cliente_nome').innerText = nomeCompleto;
+        document.getElementById('excluirClienteForm').action = `/excluir-cliente/${id}/`;
+    }
+
+    // Validação do formulário de cadastro
+    document.getElementById('cadastrarClienteForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
+        const nome = document.getElementById('cadastrar_nome').value.trim();
+        const sobrenome = document.getElementById('cadastrar_sobrenome').value.trim();
+        const contato = document.getElementById('cadastrar_contato').value.trim();
+        let isValid = true;
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const error = document.createElement('div');
+            error.className = 'error-message text-danger';
+            error.innerText = message;
+            field.parentElement.appendChild(error);
+            isValid = false;
+        }
+
+        if (!nome) {
+            showError('cadastrar_nome', 'O campo Nome é obrigatório.');
+        }
+        if (!sobrenome) {
+            showError('cadastrar_sobrenome', 'O campo Sobrenome é obrigatório.');
+        }
+        if (!contato) {
+            showError('cadastrar_contato', 'O campo Contato é obrigatório.');
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+
+    // Validação do formulário de edição
+    document.getElementById('editarClienteForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
+        const nome = document.getElementById('editar_nome').value.trim();
+        const sobrenome = document.getElementById('editar_sobrenome').value.trim();
+        const contato = document.getElementById('editar_contato').value.trim();
+        let isValid = true;
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const error = document.createElement('div');
+            error.className = 'error-message text-danger';
+            error.innerText = message;
+            field.parentElement.appendChild(error);
+            isValid = false;
+        }
+
+        if (!nome) {
+            showError('editar_nome', 'O campo Nome é obrigatório.');
+        }
+        if (!sobrenome) {
+            showError('editar_sobrenome', 'O campo Sobrenome é obrigatório.');
+        }
+        if (!contato) {
+            showError('editar_contato', 'O campo Contato é obrigatório.');
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+</script>
+{% endblock %}
