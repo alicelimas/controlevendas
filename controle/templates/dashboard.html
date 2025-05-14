@@ -8,14 +8,12 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         margin-top: 20px;
     }
-
     .dashboard-container h2 {
         color: #1934ac;
         margin-bottom: 20px;
         font-size: 1.75rem;
         font-weight: 600;
     }
-
     .dashboard-container h3 {
         color: #1934ac;
         margin-top: 20px;
@@ -23,51 +21,42 @@
         font-size: 1.25rem;
         font-weight: 500;
     }
-
     .card {
         border: none;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         margin-bottom: 15px;
     }
-
     .card-custom-1 {
         background-color: #1934ac;
         color: #ffffff;
     }
-
     .card-custom-2 {
         background-color: #28a745;
         color: #ffffff;
     }
-
     .card-custom-3 {
         background-color: #dc3545;
         color: #ffffff;
     }
-
     .card-body {
         padding: 15px;
     }
-
     .card-title {
         font-size: 1rem;
         font-weight: 500;
         margin-bottom: 10px;
     }
-
     .card-text {
         font-size: 1.5rem;
         font-weight: 600;
     }
-
     .form-container {
         background-color: #f8f9fa;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 20px;
     }
-
     .form-control,
     .form-select {
         border-radius: 8px;
@@ -75,20 +64,17 @@
         font-size: 0.95rem;
         padding: 8px;
     }
-
     .form-control:focus,
     .form-select:focus {
         border-color: #547BCF;
         box-shadow: 0 0 5px rgba(84, 123, 207, 0.3);
     }
-
     .table {
         background-color: #ffffff;
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-
     .table thead th {
         background-color: #1934ac;
         color: #ffffff;
@@ -96,20 +82,16 @@
         font-size: 0.95rem;
         padding: 10px;
     }
-
     .table tbody td {
         font-size: 0.9rem;
         padding: 8px;
     }
-
     .table tbody tr:hover {
         background-color: #f1f3f5;
     }
-
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: #fafafa;
     }
-
     .btn-primary {
         background-color: #1934ac;
         border: none;
@@ -118,12 +100,10 @@
         font-size: 0.875rem;
         font-weight: 500;
     }
-
     .btn-primary:hover {
         background-color: #547BCF;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
-
     .btn-warning {
         background-color: #ffc107;
         border: none;
@@ -131,12 +111,10 @@
         padding: 5px 10px;
         font-size: 0.875rem;
     }
-
     .btn-warning:hover {
         background-color: #e0a800;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
-
     .btn-danger {
         background-color: #dc3545;
         border: none;
@@ -144,70 +122,56 @@
         padding: 5px 10px;
         font-size: 0.875rem;
     }
-
     .btn-danger:hover {
         background-color: #c82333;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
-
     .modal-header {
         background-color: #1934ac;
         color: #ffffff;
     }
-
     .modal-footer .btn-primary {
         background-color: #1934ac;
     }
-
     .modal-footer .btn-primary:hover {
         background-color: #547BCF;
     }
-
     .modal-footer .btn-secondary {
         background-color: #6c757d;
     }
-
     .modal-footer .btn-secondary:hover {
         background-color: #5a6268;
     }
-
     .modal {
         z-index: 1055;
     }
-
     .modal-backdrop {
         z-index: 1050;
     }
-
     .error-message {
         color: #dc3545;
         font-size: 0.875rem;
         margin-top: 5px;
     }
-
     .pagination {
         justify-content: center;
         margin-top: 20px;
     }
-
     .page-link {
         border-radius: 5px;
         margin: 0 3px;
         color: #1934ac;
         font-size: 0.95rem;
     }
-
     .page-link:hover {
         background-color: #547BCF;
         color: #ffffff;
     }
-
     .page-item.active .page-link {
         background-color: #1934ac;
         border-color: #1934ac;
         color: #ffffff;
     }
-
     .page-item.disabled .page-link {
         color: #6c757d;
     }
@@ -312,7 +276,6 @@
                 <span class="page-link">«</span>
             </li>
             {% endif %}
-
             {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
             <li class="page-item active">
@@ -324,7 +287,6 @@
             </li>
             {% endif %}
             {% endfor %}
-
             {% if page_obj.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if cliente_id %}&cliente={{ cliente_id }}{% endif %}{% if data_inicio %}&data_inicio={{ data_inicio }}{% endif %}{% if data_fim %}&data_fim={{ data_fim }}{% endif %}" aria-label="Próximo">
@@ -437,7 +399,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editar_valor" class="form-label">Valor Total (R$)</label>
-                            <input type="number" name="valor" step="0.01" class="form-control" id="editar_valor" placeholder="123.45" required>
+                            <input type="text" name="valor" class="form-control" id="editar_valor" placeholder="123,45" required>
                         </div>
                         <div class="mb-3">
                             <label for="editar_data_compra" class="form-label">Data da Compra</label>
@@ -453,11 +415,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="editar_creditos" class="form-label">Créditos (R$)</label>
-                            <input type="number" name="creditos" step="0.01" class="form-control" id="editar_creditos" placeholder="123.45" required>
+                            <input type="text" name="creditos" class="form-control" id="editar_creditos" placeholder="123,45" required>
                         </div>
                         <div class="mb-3">
                             <label for="editar_saldo_devedor" class="form-label">Saldo Devedor (R$)</label>
-                            <input type="number" name="saldo_devedor" step="0.01" class="form-control" id="editar_saldo_devedor" placeholder="123.45" required>
+                            <input type="text" name="saldo_devedor" class="form-control" id="editar_saldo_devedor" placeholder="123,45" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Salvar Alterações</button>
@@ -493,18 +455,18 @@
     </div>
 </div>
 
-<!-- JavaScript para preencher os modais -->
+<!-- JavaScript para preencher os modais e formatar valores -->
 <script>
     function preencherModalEditar(id, cliente, produto, valor, parcelas, data_compra, vencimento, creditos, saldo_devedor) {
         document.getElementById('editar_venda_id').value = id;
         document.getElementById('editar_cliente').value = cliente;
         document.getElementById('editar_produto').value = produto;
-        document.getElementById('editar_valor').value = parseFloat(valor).toFixed(2);
+        document.getElementById('editar_valor').value = parseFloat(valor).toFixed(2).replace('.', ',');
         document.getElementById('editar_parcelas').value = parseInt(parcelas);
         document.getElementById('editar_data_compra').value = data_compra;
         document.getElementById('editar_vencimento').value = vencimento;
-        document.getElementById('editar_creditos').value = parseFloat(creditos).toFixed(2);
-        document.getElementById('editar_saldo_devedor').value = parseFloat(saldo_devedor).toFixed(2);
+        document.getElementById('editar_creditos').value = parseFloat(creditos).toFixed(2).replace('.', ',');
+        document.getElementById('editar_saldo_devedor').value = parseFloat(saldo_devedor).toFixed(2).replace('.', ',');
         document.getElementById('editarVendaForm').action = `/editar-venda/${id}/`;
     }
 
@@ -516,6 +478,25 @@
         document.getElementById('excluirVendaForm').action = `/excluir-venda/${id}/`;
     }
 
+    // Função para formatar valor com vírgula (ex.: 12345 -> 123,45)
+    function formatarValor(input) {
+        let valor = input.value.replace(/\D/g, '');
+        if (valor === '') {
+            input.value = '0,00';
+            return;
+        }
+        valor = (parseInt(valor) / 100).toFixed(2).replace('.', ',');
+        input.value = valor;
+    }
+
+    // Aplica formatação aos campos numéricos
+    document.querySelectorAll('#editar_valor, #editar_creditos, #editar_saldo_devedor').forEach(input => {
+        input.addEventListener('input', () => formatarValor(input));
+        input.addEventListener('focus', () => {
+            if (input.value === '') input.value = '0,00';
+        });
+    });
+
     // Validação do formulário de edição
     document.getElementById('editarVendaForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -523,21 +504,19 @@
         errorMessages.forEach(msg => msg.remove());
 
         const produto = document.getElementById('editar_produto').value.trim();
-        const valor = parseFloat(document.getElementById('editar_valor').value);
+        const valor = parseFloat(document.getElementById('editar_valor').value.replace(',', '.'));
         const parcelas = parseInt(document.getElementById('editar_parcelas').value);
         const dataCompra = document.getElementById('editar_data_compra').value;
         const vencimento = document.getElementById('editar_vencimento').value;
-        const creditos = parseFloat(document.getElementById('editar_creditos').value);
-        const saldoDevedor = parseFloat(document.getElementById('editar_saldo_devedor').value);
+        const creditos = parseFloat(document.getElementById('editar_creditos').value.replace(',', '.'));
+        const saldoDevedor = parseFloat(document.getElementById('editar_saldo_devedor').value.replace(',', '.'));
 
         let isValid = true;
 
         function showError(fieldId, message) {
             const field = document.getElementById(fieldId);
             const error = document.createElement('div');
-            error.className = 'error-message text-danger';
-            error.style.fontSize = '0.875rem';
-            error.style.marginTop = '5px';
+            error.className = 'error-message';
             error.innerText = message;
             field.parentElement.appendChild(error);
             isValid = false;
@@ -553,7 +532,12 @@
         if (saldoDevedor > valor) showError('editar_saldo_devedor', 'O Saldo Devedor não pode ser maior que o Valor Total.');
         if (creditos > valor) showError('editar_creditos', 'Os Créditos não podem ser maiores que o Valor Total.');
 
-        if (isValid) this.submit();
+        if (isValid) {
+            document.getElementById('editar_valor').value = valor.toFixed(2);
+            document.getElementById('editar_creditos').value = creditos.toFixed(2);
+            document.getElementById('editar_saldo_devedor').value = saldoDevedor.toFixed(2);
+            this.submit();
+        }
     });
 </script>
 {% endblock %}

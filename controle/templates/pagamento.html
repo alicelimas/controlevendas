@@ -21,6 +21,7 @@
         border-radius: 8px; 
         border: 1px solid #ced4da; 
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); 
+        height: calc(2.5rem + 2px); /* Altura consistente para todos os campos */
     }
     .form-control:focus, .form-select:focus { 
         border-color: #547BCF; 
@@ -53,10 +54,23 @@
             </select>
         </div>
         <div class="form-floating mb-3">
-            <input type="number" step="0.01" class="form-control" id="valor_pago" name="valor_pago" placeholder="R$ 123.45" required>
+            <input type="text" class="form-control" id="valor_pago" name="valor_pago" placeholder="R$ 123.45" required>
             <label for="valor_pago">Valor Pago (R$)</label>
         </div>
         <button type="submit" class="btn btn-primary">Adicionar Pagamento</button>
     </form>
 </div>
+<script>
+    function formatarValor(input) {
+        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+        if (!valor) {
+            input.value = '';
+            return;
+        }
+        valor = (parseInt(valor) / 100).toFixed(2); // Divide por 100 e fixa 2 casas decimais
+        input.value = valor; // Formato 123.45
+    }
+    const valorInput = document.getElementById('valor_pago');
+    valorInput.addEventListener('input', () => formatarValor(valorInput));
+</script>
 {% endblock %}
